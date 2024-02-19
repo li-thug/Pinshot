@@ -1,9 +1,8 @@
 * {
-  font-family: 'Manrope Variable', sans-serif;
+  font-family: "Manrope Variable", sans-serif;
   text-decoration: none !important;
   scroll-behavior: smooth;
 }
-
 
 :root {
   line-height: 1.5;
@@ -15,28 +14,33 @@
   --orangeLight: #dd5e14;
   --white100: #ffffff;
   --dark100: #0f1212;
+  --teal100: rgb(174, 195, 185);
+  --teal200: rgb(70, 94, 83);
+  --gray100: #e2e3e5;
 }
 
-a{
+body {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+a {
   color: inherit !important;
 }
 
-/* button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
 button:hover {
-  border-color: #646cff;
+  filter: brightness(80%);
+  transition: 0.3s ease-in-out;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
- */
+.no-activeLink:hover {
+  color: var(--teal200) !important;
+  transition: 0.3s ease-in-out;
+}
+.activeLink {
+  color: var(--teal200) !important;
+  transition: 0.3s ease-in-out;
+}

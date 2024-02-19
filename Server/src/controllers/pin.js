@@ -17,6 +17,9 @@ export const createAPin = async (req, res, next) => {
       );
     }
     const user = await User.findById(userId);
+    if (!user.isVerified) {
+      return next(createHttpError(401, "Email not verified, pls verify create a pin"));
+    }
     const pinData = {
       userId: user._id,
       title: pinParams.title,
@@ -67,7 +70,7 @@ export const getRandomPins = async (req, res, next) => {
       res.status(200).json(cachedPins);
     }
     const count = await Pin.countDocuments();
-    const pins = await Pin.aggregate([{ $sample: { size: 100 } }])
+    const pins = await Pin.aggregate([{ $sample: { size: 60 } }])
       .skip(skipCount)
       .limit(limit);
     if (!pins) {
@@ -315,7 +318,7 @@ export const getRelatedPins = async (req, res, next) => {
     const filterRelatedPins = getRelatedTags.filter(
       (allPins) => allPins.id !== pinId
     );
-    res.status(200).json(getRelatedTags);
+    res.status(200).json(filterRelatedPins);
   } catch (error) {
     next(error);
   }

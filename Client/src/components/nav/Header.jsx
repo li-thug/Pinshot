@@ -6,8 +6,8 @@ import MyButton from "../MyButton";
 
 export default function Header() {
   return (
-    <div className={`${styles.navContainer} position-fixed top-0 w-100 p-3`}>
-      <div className="d-flex justify-content-between align-items-center mb-3">
+    <div className={`${styles.navContainer} d-none d-md-block fixed-top w-100 p-3`}>
+      <div className="d-flex justify-content-between align-items-center ">
         <Stack direction="horizontal" gap={3}>
           <NavLink to="/">
             <Image
@@ -20,21 +20,21 @@ export default function Header() {
           <NavLink
             to="/explore"
             className={({ isActive }) =>
-              isActive ? "activeLink" : "no-activeLink"
+              isActive ? "activeLink fw-bold" : "no-activeLink fw-bold"
             }
           >
             Explore
           </NavLink>
         </Stack>
-        <Form style={{ minWidth: "50%" }}>
-          <InputGroup className="d-none d-md-flex w-100 mx-auto rounded-pill border-0 bg-secondary-subtle">
+        <Form style={{ minWidth: "50%" }} className="d-none mx-auto">
+          <InputGroup className="w-100 rounded-pill border-0 bg-secondary-subtle">
             <Form.Control
               placeholder="Search"
               aria-label="Search bar"
-              className="rounded-start-pill border-0 bg-transparent"
+              className="rounded-start-pill border-0 bg-transparent p-2"
             />
             <Button variant="none" type="submit">
-              <FiSearch />
+              <FiSearch size="20px"/>
             </Button>
           </InputGroup>
         </Form>
@@ -42,14 +42,14 @@ export default function Header() {
           <Stack direction="horizontal" gap={3}>
             <NavLink to="/login">
               <MyButton
-                className={`${styles.btn} border-0`}
+                className={`${styles.btn} border-0 p-2 rounded-pill`}
                 style={{ minWidth: "fit-content" }}
                 text="Log in"
               />
             </NavLink>
             <NavLink to="/signup">
               <MyButton
-                className="border-0 bg-secondary-subtle text-dark"
+                className="border-0 bg-secondary-subtle text-dark p-2 rounded-pill"
                 style={{ minWidth: "fit-content" }}
                 text="Sign up"
               />
