@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div className="mt-md-5 px-0">
       <div className="d-none d-md-block py-5">
-        <h1 className="text center my-5 display-4 fw-bold">
+        <h1 className="text-center my-5 display-4 fw-bold">
           See what your friends <br />
           <span style={{ color: "var(--teal100)" }}>are up to</span>
         </h1>
