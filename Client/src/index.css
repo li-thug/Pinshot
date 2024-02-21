@@ -16,20 +16,25 @@
   --dark100: #0f1212;
   --teal100: rgb(174, 195, 185);
   --teal200: rgb(70, 94, 83);
-  --gray100: #e2e3e5;
+  --grey100: #e2e3e5;
 }
 
 .cursor {
   cursor: pointer;
 }
 
-/* body {
-  max-width: 1440px;
+/* .layout {
+  max-width: 1440px !important;
   margin: 0 auto;
 } */
 
 a {
   color: inherit !important;
+}
+
+a:hover {
+  color: var(--teal200) !important;
+  transition: 0.3s ease-in-out;
 }
 
 button:hover {
@@ -40,12 +45,14 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
-.no-activeLink:hover {
-  color: var(--teal200) !important;
-  transition: 0.3s ease-in-out;
-}
+
 .activeLink {
   color: var(--orangeLight) !important;
+  transition: 0.3s ease-in-out;
+}
+
+.no-activeLink:hover {
+  color: var(--teal200) !important;
   transition: 0.3s ease-in-out;
 }
 
@@ -71,14 +78,13 @@ button:focus-visible {
   position: relative;
 }
 
-.focos-heart {
+.focus-download {
   position: absolute;
   bottom: 0;
   right: 0;
   z-index: 2;
 }
-
-.focos-download {
+.focus-heart {
   position: absolute;
   top: 0;
   right: 0;
@@ -99,7 +105,7 @@ button:focus-visible {
   border-radius: 15px;
 }
 
-@media (min-width: 768) {
+@media (min-width: 768px) {
   .form {
     width: 420px;
   }
@@ -112,6 +118,14 @@ button:focus-visible {
   .cardBox * {
     transition: 0.3s ease all;
   }
+  .cardBox img {
+    margin: 0;
+    width: 300px;
+    height: 224px;
+    object-fit: cover;
+    display: block;
+  }
+
   .cardBox:hover img {
     background-color: var(--dark100);
     width: 100%;

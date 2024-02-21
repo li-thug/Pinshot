@@ -17,19 +17,19 @@ export default function FormUi({
   return (
     <Container
       fluid
-      className="min-vh-100 d-flex justify-content-center align-item-center backdrop"
+      className="min-vh-100 d-flex justify-content-center align-items-center backdrop"
     >
       <Form
-        className="form Shadow-lg bg-light bg-opacity-75"
+        className="form shadow-lg bg-light bg-opacity-75"
         onSubmit={onSubmit}
       >
         <div className="z-3">
           <div className="text-center mb-4">
             <Image
               src={
-                "https://res.cloudinary.com/ceenobi/image/upload/v1706179614/pintube/Frame_16_ecr4pq.svg"
+                " https://res.cloudinary.com/ceenobi/image/upload/v1706179614/pintube/Frame_16_ecr4pq.svg"
               }
-              alt="Logo"
+              alt="logo"
               style={{ width: "130px", height: "fit-content" }}
             />
           </div>
@@ -41,14 +41,14 @@ export default function FormUi({
             variant="none"
             type="submit"
             className="w-100 border-0 p-2 my-2 text-white"
-            style={{ backgroundColor: "var(--orangeLight" }}
+            style={{ backgroundColor: "var(--orangeLight)" }}
             size="lg"
-            text= {isSubmitting ? <ClipLoader color="#ffffff"/> : btnText}
-            disable= {isSubmitting}
+            text={isSubmitting ? <ClipLoader color="#ffffff" /> : btnText}
+            disabled={isSubmitting}
           />
-          <div className="d-flex justify-content-center align-item-center">
+          <div className="d-flex justify-content-between align-items-center">
             <span className="fw-medium">{info}</span>
-            <div style={{ color: "var(--orangeLight", fontWeight: 500 }}>
+            <div style={{ color: "var(--orangeLight)", fontWeight: 500 }}>
               <Link to={to}>{path}</Link>
             </div>
           </div>
@@ -65,6 +65,6 @@ FormUi.propTypes = {
   to: PropTypes.string,
   path: PropTypes.string,
   btnText: PropTypes.string,
-  isSubmitting:  PropTypes.bool,
-  onSubmit:  PropTypes.string,
+  isSubmitting: PropTypes.bool,
+  onSubmit: PropTypes.string,
 };

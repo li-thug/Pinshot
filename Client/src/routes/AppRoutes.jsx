@@ -1,8 +1,7 @@
-import { Home, Explore } from "@pages";
 import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Home, Explore, Login } from "@pages";
 import { Spinner } from "@utils";
-import { Login } from "@pages";
 
 const Root = lazy(() => import("@layouts/Root"));
 
@@ -14,7 +13,7 @@ export default function AppRoutes() {
       element: <Home />,
     },
     {
-      path: "Explore",
+      path: "explore",
       name: "Explore",
       element: <Explore />,
     },
@@ -24,12 +23,13 @@ export default function AppRoutes() {
       element: <Login />,
     },
   ];
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: (
-        <Suspense fallback={<Spinner text="PINSHOT"/>}>
-          <Root routes={routes}/>
+        <Suspense fallback={<Spinner text="PINSHOT" />}>
+          <Root routes={routes} />
         </Suspense>
       ),
       children: routes.map((route) => ({

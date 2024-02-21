@@ -1,12 +1,13 @@
 import { useEffect, useState, useMemo } from "react";
 
 export default function useFetch(api, params, extra) {
-  const [getData, setGetData] = useState([]);
-  const [pageData, setPageData] = useState([]);
-  const [loading, setLoading] = useState([]);
+  const [getData, setData] = useState([]);
+  const [pagedData, setPagedData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const data = useMemo(() => getData, [getData]);
+
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -16,13 +17,13 @@ export default function useFetch(api, params, extra) {
       try {
         const res = await api(params, extra, { signal });
         if (!signal.aborted) {
-          setGetData(res.data);
-          setPageData(res.data?.pins);
+          setData(res.data);
+          setPagedData(res.data?.pins);
           setError(null);
         }
       } catch (error) {
         if (!signal.aborted) {
-          setError(error?.response?.data || error?.message);
+          setError(error?.response?.data?.error || error?.message);
         }
         console.error(error);
       } finally {
@@ -36,5 +37,6 @@ export default function useFetch(api, params, extra) {
       controller.abort();
     };
   }, [api, params, extra]);
-  return { data, loading, error, setGetData, pageData, setLoading };
+
+  return { data, loading, error, setData, pagedData, setPagedData };
 }

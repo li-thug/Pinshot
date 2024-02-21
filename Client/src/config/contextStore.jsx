@@ -1,15 +1,16 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useState, useMemo, useRef } from "react";
 import PropTypes from "prop-types";
 
-export const AuthContent = createContext();
+export const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
-  const { fecthUser, setLoggedInUser } = useState("");
-  const LoggedInUser = useMemo(() => fecthUser, [fecthUser]);
+  const [fetchUser, setLoggedInUser] = useState("");
+  const loggedInUser = useMemo(() => fetchUser, [fetchUser]);
+
   return (
-    <AuthContent.Provider value={{ LoggedInUser }}>
+    <AuthContext.Provider value={{ loggedInUser }}>
       {children}
-    </AuthContent.Provider>
+    </AuthContext.Provider>
   );
 }
 

@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { useFetch, useTitle } from "@hooks";
 import { pinService } from "@services";
-import { useState } from "react";
 import { PageLayout } from "@layouts";
 import { Spinner } from "@utils";
 import { ReactInfiniteScroll, MasonryLayout, PinCard } from "@components";
@@ -18,10 +18,10 @@ export default function Explore() {
   console.log("ft", firstData);
 
   const fetchMoreData = async () => {
-    if (data?.pins?.length < 20) {
-      setHasMore(false);
-      return;
-    }
+    // if (data?.pins?.length < 20) {
+    //   setHasMore(false);
+    //   return;
+    // }
     try {
       setMoreData((prevMoreData) => [...prevMoreData, ...firstData]);
       setHasMore(moreData.length > 0);
@@ -31,8 +31,10 @@ export default function Explore() {
       console.error(error);
     }
   };
+
   const allPins = [...moreData, ...firstData];
   console.log("all", allPins);
+
   return (
     <PageLayout>
       {error ? (
@@ -42,7 +44,7 @@ export default function Explore() {
           {loading && <Spinner text="Fetching pins" />}
           {allPins?.length > 0 ? (
             <ReactInfiniteScroll
-              dataLength={allPins.length}
+              dataLength={allPins?.length}
               fetchData={fetchMoreData}
               hasMore={hasMore}
             >
@@ -53,7 +55,7 @@ export default function Explore() {
               </MasonryLayout>
             </ReactInfiniteScroll>
           ) : (
-            <p>No pins to show at the moment</p>
+            <p>No pins to show at the moment.</p>
           )}
         </>
       )}

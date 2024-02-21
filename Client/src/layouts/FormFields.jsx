@@ -1,5 +1,5 @@
 import { Form, FloatingLabel } from "react-bootstrap";
-import { PropTypes } from "prop-types";
+import PropTypes from "prop-types";
 
 export default function FormFields({
   id,
@@ -33,11 +33,17 @@ export default function FormFields({
       {type === "password" && (
         <>
           {showPassword ? (
-            <span className="position-absolute top-50 end-0 translate-middle cursor" onClick={togglePassword}>
+            <span
+              className="position-absolute top-50 end-0 translate-middle cursor"
+              onClick={togglePassword}
+            >
               Hide
             </span>
           ) : (
-            <span className="position-absolute top-50 end-0 translate-middle cursor" onClick={togglePassword}>
+            <span
+              className="position-absolute top-50 end-0 translate-middle cursor"
+              onClick={togglePassword}
+            >
               Show
             </span>
           )}

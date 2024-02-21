@@ -17,10 +17,10 @@ export default function Home() {
           See what your friends <br />
           <span style={{ color: "var(--teal100)" }}>are up to</span>
         </h1>
-        <Row className="g-3 px-3">
+        <Row className="g-3 px-3 justify-content-center">
           {imgs.map((img, i) => (
             <Col key={i} md={4} lg={3}>
-              <Image src={img} className="img-fluid  rounded-4" />
+              <Image src={img} className="w-100 h-100 rounded-4" />
             </Col>
           ))}
         </Row>
@@ -38,7 +38,7 @@ export default function Home() {
             src={
               "https://res.cloudinary.com/ceenobi/image/upload/v1706179614/pintube/Frame_16_ecr4pq.svg"
             }
-            alt="Logo"
+            alt="logo"
             style={{ width: "200px" }}
           />
           <h1 className="my-4 text-center text-white fw-bold display-5">
@@ -63,7 +63,7 @@ export default function Home() {
       <div
         className={`d-md-flex justify-content-center justify-content-md-between align-items-center ${styles.explore}`}
       >
-        <div>
+        <div  className="w-100 h-100">
           <Image
             src={
               "https://unsplash.com/photos/YSB0wB74Gpg/download?ixid=M3wxMjA3fDB8MXx0b3BpY3x8UzRNS0xBc0JCNzR8fHx8fDJ8fDE3MDgxMTY3OTV8&force=true&w=640"

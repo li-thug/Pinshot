@@ -1,10 +1,10 @@
-import PropTypes from "prop-types";
+import Proptypes from "prop-types";
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { FaHeart } from "react-icons/fa";
 import { IoMdDownload } from "react-icons/io";
 
-export default function PinCard({_id, title, image}) {
+export default function PinCard({ _id, title, image }) {
   return (
     <>
       <div className="cardBox w-100 h-auto rounded-4 mb-0">
@@ -17,10 +17,10 @@ export default function PinCard({_id, title, image}) {
             title={title}
           />
         </Link>
-        <div className="d-none d-md-block focus-heart p-2">
+        <div className="d-none d-xl-block focus-heart p-2">
           <FaHeart color="white" />
         </div>
-        <div className="d-none d-md-block focus-download p-2">
+        <div className="d-none d-xl-block focus-download p-2">
           <IoMdDownload color="white" />
         </div>
       </div>
@@ -32,7 +32,7 @@ export default function PinCard({_id, title, image}) {
 }
 
 PinCard.propTypes = {
-  _id: PropTypes.string,
-  title: PropTypes.string,
-  image: PropTypes.array,
+  _id: Proptypes.string,
+  title: Proptypes.string,
+  image: Proptypes.array,
 };

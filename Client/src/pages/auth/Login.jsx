@@ -9,27 +9,29 @@ import { userService } from "@services";
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const {
-    register,
     handleSubmit,
+    register,
     formState: { errors, isSubmitting },
   } = useForm();
+
   useTitle("Login to PINSHOT");
 
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
   };
+
   const onFormSubmit = async (data) => {
-    console.log(data)
-  }
+    console.log(data);
+  };
 
   return (
     <FormUi
       title="Welcome, Login"
-      info="Don't havr an account?"
+      info="Don't have an account?"
       to="/signup"
-      path="Sign up"
+      path="Sign Up"
       btnText="Login"
       onSubmit={handleSubmit(onFormSubmit)}
       isSubmitting={isSubmitting}
@@ -43,7 +45,7 @@ export default function Login() {
         label="Username"
         name="userName"
         type="text"
-        placehoder="Username"
+        placeholder="Username"
       />
       <FormFields
         register={register}
@@ -54,15 +56,15 @@ export default function Login() {
         label="Password"
         name="Password"
         type="password"
-        placehoder="Password"
+        placeholder="Password"
         showPassword={showPassword}
         togglePassword={togglePassword}
       />
       <div
         className="w-100 text-end my-2"
-        style={{ color: "var(--orangelight), fontWeight:500" }}
+        style={{ color: "var(--orangeLight)", fontWeight: 500 }}
       >
-        <Link to="/forgot-password">Forgot Password</Link>
+        <Link to="/forgot-password">Forgot Password?</Link>
       </div>
     </FormUi>
   );

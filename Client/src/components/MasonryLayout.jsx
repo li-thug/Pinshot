@@ -2,7 +2,7 @@ import Masonry from "react-masonry-css";
 import PropTypes from "prop-types";
 
 const breakpointColumnsObj = {
-  default: 4,
+  default: 5,
   2000: 5,
   1100: 4,
   700: 3,
