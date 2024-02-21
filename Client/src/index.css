@@ -19,10 +19,14 @@
   --gray100: #e2e3e5;
 }
 
-body {
+.cursor {
+  cursor: pointer;
+}
+
+/* body {
   max-width: 1440px;
   margin: 0 auto;
-}
+} */
 
 a {
   color: inherit !important;
@@ -81,18 +85,38 @@ button:focus-visible {
   z-index: 2;
 }
 
-@media (min-width: 1200PX){
+.backdrop {
+  background-image: url("https://unsplash.com/photos/3hRl61WieaE/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8NzJ8fEluc3RhZ3JhbXxlbnwwfHx8fDE3MDg1MTQ5NzJ8MA&force=true&w=1920");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+.form {
+  width: 90%;
+  padding: 2rem;
+  border-radius: 15px;
+}
+
+@media (min-width: 768) {
+  .form {
+    width: 420px;
+  }
+}
+
+@media (min-width: 1200px) {
   .cardBox {
-   overflow: hidden;
+    overflow: hidden;
   }
   .cardBox * {
-   transition: 0.3S ease all;
+    transition: 0.3s ease all;
   }
   .cardBox:hover img {
-  background-color: var(--dark100);
-  width: 100%;
-  height: 100%;
-  filter: brightness(60%) !important;
-  transition: 0.3S ease-in-out;
+    background-color: var(--dark100);
+    width: 100%;
+    height: 100%;
+    filter: brightness(60%) !important;
+    transition: 0.3s ease-in-out;
   }
 }

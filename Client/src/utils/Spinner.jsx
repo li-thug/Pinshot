@@ -1,6 +1,5 @@
 import { HashLoader } from "react-spinners";
-import PropTypes  from "prop-types";
-
+import PropTypes from "prop-types";
 
 export default function Spinner({ text }) {
   return (
@@ -12,5 +11,5 @@ export default function Spinner({ text }) {
 }
 
 Spinner.propTypes = {
-  text: PropTypes.string
+  text: PropTypes.string,
 };

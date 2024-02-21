@@ -1,4 +1,4 @@
-import { Form, Image, InputGroup, Button, Stack } from "react-bootstrap";
+import { Form, Image, InputGroup, Button, Stack, Container } from "react-bootstrap";
 import { FiSearch } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import styles from "./nav.module.css";
@@ -6,7 +6,7 @@ import MyButton from "../MyButton";
 
 export default function Header() {
   return (
-    <div className={`${styles.navContainer} d-none d-md-block fixed-top w-100 p-3`}>
+    <Container className={`${styles.navContainer} d-none d-md-block fixed-top w-100 p-3`}>
       <div className="d-flex justify-content-between align-items-center ">
         <Stack direction="horizontal" gap={3}>
           <NavLink to="/">
@@ -38,7 +38,6 @@ export default function Header() {
             </Button>
           </InputGroup>
         </Form>
-        <div>
           <Stack direction="horizontal" gap={3}>
             <NavLink to="/login">
               <MyButton
@@ -55,8 +54,8 @@ export default function Header() {
               />
             </NavLink>
           </Stack>
-        </div>
+      
       </div>
-    </div>
+    </Container>
   );
 }
