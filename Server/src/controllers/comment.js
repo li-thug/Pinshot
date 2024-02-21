@@ -17,32 +17,34 @@ export const addAComment = async (req, res, next) => {
     }
     const pin = await Pin.findById(pinId);
     if (!pin) {
-      return next(createHttpError(400, "pin not found"));
+      return next(createHttpError(404, "Pin not found"));
     }
 
     if (!comment) {
-      return next(createHttpError(400, "comment is missing"));
+      return next(createHttpError(400, "Comment is missing"));
     }
     const user = await User.findById(userId);
     if (!user) {
       return next(createHttpError(404, "User not found"));
     }
     if (!user.isVerified) {
-      return next(createHttpError(401, "Email not verified, pls verify to comment"));
+      return next(
+        createHttpError(401, "Email not verified, pls verify to comment")
+      );
     }
-    const commentobj = {
+    const commentObj = {
       userId: user._id,
       pinId: pinId,
       comment: comment,
     };
-    const comments = await Comment.create(commentobj);
-    res.status(201).json({ comments, msg: "comment added successfully" });
+    const comments = await Comment.create(commentObj);
+    res.status(201).json({ comments, msg: "Comment added successfully" });
   } catch (error) {
     next(error);
   }
 };
 
-export const getComment = async (req, res, next) => {
+export const getComments = async (req, res, next) => {
   const { id: pinId } = req.params;
   try {
     if (!isValidObjectId(pinId)) {
@@ -53,13 +55,13 @@ export const getComment = async (req, res, next) => {
     }
     const pin = await Pin.findById(pinId);
     if (!pin) {
-      return next(createHttpError(400, "pin not found"));
+      return next(createHttpError(404, "Pin not found"));
     }
     const comments = await Comment.find({ pinId: pinId })
       .populate("userId", "userName profilePhoto")
       .sort({ _id: -1 });
     if (!comments) {
-      return next(createHttpError(404, "Comment not found"));
+      return next(createHttpError(404, "Comments not found"));
     }
     res.status(200).json(comments);
   } catch (error) {
@@ -72,45 +74,45 @@ export const likeAComment = async (req, res, next) => {
   const { id: commentId } = req.params;
   try {
     if (!isValidObjectId(userId) || !isValidObjectId(commentId)) {
-      return next(createHttpError(400, "Invalid user or Comment id"));
+      return next(createHttpError(400, "Invalid user or comment id"));
     }
     if (!commentId) {
       return next(createHttpError(400, "commentId is missing"));
     }
     const comment = await Comment.findByIdAndUpdate(commentId, {
-      $addToSet: { like: userId },
+      $addToSet: { likes: userId },
       $inc: { likeCount: 1 },
     });
     if (!comment) {
-      return next(createHttpError(404, "Comment not find"));
+      return next(createHttpError(404, "Comment not found"));
     }
     if (comment.likes.includes(userId)) {
-      res.status(400).send("You already like this comment!");
+      res.status(400).send("You already liked this comment!");
     }
-    res.status(200).send("comment liked");
+    res.status(200).send("Comment liked!");
   } catch (error) {
     next(error);
   }
 };
 
-export const disLikeAComment = async (req, res, next) => {
+export const dislikeAComment = async (req, res, next) => {
   const { id: userId } = req.user;
   const { id: commentId } = req.params;
   try {
     if (!isValidObjectId(userId) || !isValidObjectId(commentId)) {
-      return next(createHttpError(400, "Invalid user or Comment id"));
+      return next(createHttpError(400, "Invalid user or comment id"));
     }
     if (!commentId) {
       return next(createHttpError(400, "commentId is missing"));
     }
     const comment = await Comment.findByIdAndUpdate(commentId, {
-      $pull: { like: userId },
+      $pull: { likes: userId },
       $inc: { likeCount: -1 },
     });
     if (!comment) {
-      return next(createHttpError(404, "Comment not find"));
+      return next(createHttpError(404, "Comment not found"));
     }
-    res.status(200).send("comment disliked");
+    res.status(200).send("Comment disliked!");
   } catch (error) {
     next(error);
   }
@@ -121,20 +123,20 @@ export const deleteAComment = async (req, res, next) => {
   const { id: commentId } = req.params;
   try {
     if (!isValidObjectId(userId) || !isValidObjectId(commentId)) {
-      return next(createHttpError(400, "Invalid user or Comment id"));
+      return next(createHttpError(400, "Invalid user or comment id"));
     }
     if (!commentId) {
       return next(createHttpError(400, "commentId is missing"));
     }
     const user = await User.findById(userId);
-    const comment = Comment.findByIdAndDelete(commentId);
+    const comment = await Comment.findByIdAndDelete(commentId);
     if (!user._id.equals(comment.userId)) {
-      return next(createHttpError(400, "You can only delete your own comment"));
+      return next(createHttpError(401, "You can only delete your own comment"));
     }
     if (!comment) {
-      return next(createHttpError(400, "Comment not found"));
+      return next(createHttpError(404, "Comment not found"));
     }
-    res.status(200).send("comment deleted!");
+    res.status(200).send("Comment deleted!");
   } catch (error) {
     next(error);
   }

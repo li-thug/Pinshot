@@ -10,23 +10,23 @@ router.post("/create", verifyToken(Roles.All), PinController.createAPin);
 router.get("/", PinController.getAllPins);
 router.get("/random-explore", PinController.getRandomPins);
 
-router.get("followed", verifyToken(Roles.All), PinController.getFollowedPins);
+router.get("/followed", verifyToken(Roles.All), PinController.getFollowedPins);
 
 router.get(
   "/:id/userpins",
   verifyToken(Roles.All),
   PinController.getPinsByUser
 );
+
 router.get("/:id", verifyToken(Roles.All), PinController.getASinglePin);
 
 router.put("/like/:id", verifyToken(Roles.All), PinController.likeAPin);
-
-router.put("/dislike/:id", verifyToken(Roles.All), PinController.disLikeAPin);
+router.put("/dislike/:id", verifyToken(Roles.All), PinController.dislikeAPin);
 
 router.get(
   "/:id/likedpins",
   verifyToken(Roles.All),
-  PinController.getPinLikedByUser
+  PinController.getPinsLikedByUser
 );
 
 router.patch("/:id", verifyToken(Roles.All), PinController.updateAPin);

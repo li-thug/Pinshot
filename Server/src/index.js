@@ -1,12 +1,12 @@
-import { connectToDb } from "./config/mongoDB.js";
+import { connectToDb } from "./config/mongoDb.js";
 import app from "./app.js";
 import env from "./utlis/validateEnv.js"
 
 const port = env.PORT || 6000;
 
-if (!port || !env.MONGODB_URL) {
+if (!port || !env.MONGODB_URI) {
   throw new Error(
-    "Plese make sure the env file is in place and populated with a port number"
+    "Please make sure the env file is in place and populated with a port number"
   );
 }
 
@@ -17,7 +17,7 @@ connectToDb()
         console.log(`Server is connected to port:${port}`);
       });
     } catch (error) {
-      console.log("Cannot connect to Server");
+      console.log("Cannot connect to server");
     }
   })
   .catch(() => {

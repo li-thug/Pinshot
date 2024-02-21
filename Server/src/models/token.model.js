@@ -1,23 +1,20 @@
 import { Schema, model } from "mongoose";
 
-const tokenSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+const tokenSchema = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    token: {
+      type: String,
+      required: true,
+    },
+    expireAt: { type: Date, default: Date.now, expires: 1800 },
   },
-  token: {
-    type: String,
-    required: true,
-  },
-  exprieAt: {
-    type: Date,
-    default: Date.now,
-    expires: 1800,
-  },
-},
 
-{
+  {
     timestamps: true,
   }
 );

@@ -1,12 +1,12 @@
 import express from "express";
 import * as AuthController from "../controllers/user.js";
 import { verifyToken, Roles } from "../middleware/authVerify.js";
-import { genLimiter} from "../middleware/rateLimit.js";
+import { genLimiter } from "../middleware/rateLimit.js";
 
 const router = express.Router();
 
 router.post("/signup", AuthController.signUp);
-router.post("/login", genLimiter, AuthController.Login);
+router.post("/login", genLimiter, AuthController.login);
 
 //verify user email
 router.post(
@@ -22,11 +22,15 @@ router.patch(
   AuthController.verifyAccount
 );
 
-//reset user Password
+//reset user Pasword
 router.post("/verify-email", genLimiter, AuthController.recoverPasswordLink);
-router.patch("/reset-password/:id/:token", genLimiter, AuthController.resetUserPassword);
+router.patch(
+  "/reset-password/:id/:token",
+  genLimiter,
+  AuthController.resetUserPassword
+);
 
-//authenticte user
+//authenticate user
 router.get("/", verifyToken(Roles.All), AuthController.authenticateUser);
 
 router.get(
@@ -46,13 +50,13 @@ router.put("/follow/:id", verifyToken(Roles.All), AuthController.followAUser);
 router.put(
   "/unfollow/:id",
   verifyToken(Roles.All),
-  AuthController.unFollowAUser
+  AuthController.unfollowAUser
 );
 
 router.get(
   "/following/:id",
   verifyToken(Roles.All),
-  AuthController.getFollowedUser
+  AuthController.getFollowedUsers
 );
 
 router.get(

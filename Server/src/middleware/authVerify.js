@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import createHttpError from "http-errors";
 import { promisify } from "util";
+import createHttpError from "http-errors";
 import env from "../utlis/validateEnv.js";
 
 const jwtVerify = promisify(jwt.verify);
@@ -30,14 +30,14 @@ export const verifyToken =
       return next(
         createHttpError(
           403,
-          "Broken or expired token, pls login to gain access"
+          "Broken or expired token. pls login to gain access"
         )
       );
     }
   };
 
 export const Roles = {
-  User: "User",
+  User: ["user"],
   Admin: ["admin"],
   All: ["user", "admin"],
-}
+};

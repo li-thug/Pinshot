@@ -7,15 +7,16 @@ const sendEmail = async ({ from, to, subject, text, userName }) => {
     theme: "default",
     product: {
       name: "Pinshot",
-      link: "http://mailgen..js",
+      link: "https://mailgen.js/",
     },
   });
+
   var email = {
     body: {
       name: userName,
       intro: text || "Welcome to Pinshot",
       outro:
-        "Need help, or have questions? Just reply to this email, we'd love to help.",
+        "Need help, or have questions? Just reply to this email, we'd love to help",
     },
   };
 
@@ -40,7 +41,7 @@ const sendEmail = async ({ from, to, subject, text, userName }) => {
     return { success: true, msg: "Email sent successfully" };
   } catch (error) {
     console.log(error);
-    return { success: false, msg: "Faild to send email" };
+    return { success: false, msg: "Failed to send email" };
   }
 };
 

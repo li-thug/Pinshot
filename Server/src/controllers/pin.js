@@ -12,13 +12,13 @@ export const createAPin = async (req, res, next) => {
   const pinParams = req.body;
   try {
     if (!userId || !pinParams) {
-      return next(
-        createHttpError(400, "Invalid userId or parameter is missing")
-      );
+      return next(createHttpError(400, "Invalid userId or parameters missing"));
     }
     const user = await User.findById(userId);
     if (!user.isVerified) {
-      return next(createHttpError(401, "Email not verified, pls verify create a pin"));
+      return next(
+        createHttpError(401, "Email not verified, pls verify to create a pin")
+      );
     }
     const pinData = {
       userId: user._id,
@@ -27,6 +27,7 @@ export const createAPin = async (req, res, next) => {
       image: pinParams.image,
       tags: pinParams.tags,
     };
+
     const pin = await Pin.create(pinData);
     res.status(201).json(pin);
   } catch (error) {
@@ -45,7 +46,7 @@ export const getAllPins = async (req, res, next) => {
       .skip(skipCount)
       .limit(limit);
     if (!pins) {
-      return next(createHttpError(404, "pin not found"));
+      return next(createHttpError(404, "Pins not found"));
     }
     const totalPages = Math.ceil(count / limit);
     const allPins = {
@@ -67,14 +68,14 @@ export const getRandomPins = async (req, res, next) => {
   try {
     const cachedPins = cache.get(cacheKey);
     if (cachedPins) {
-      res.status(200).json(cachedPins);
+      return res.status(200).json(cachedPins);
     }
     const count = await Pin.countDocuments();
     const pins = await Pin.aggregate([{ $sample: { size: 60 } }])
       .skip(skipCount)
       .limit(limit);
     if (!pins) {
-      return next(createHttpError(404, "Pin not found"));
+      return next(createHttpError(404, "Pins not found"));
     }
     const totalPages = Math.ceil(count / limit);
     const allPins = {
@@ -94,14 +95,13 @@ export const getFollowedPins = async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 20;
   const skipCount = (page - 1) * limit;
-
   try {
     const user = await User.findById(userId);
     if (!user) {
       return next(createHttpError(404, "User not found"));
     }
     const count = await Pin.countDocuments();
-    const subscribedPins = User.following;
+    const subscribedPins = user.following;
     const pins = await Pin.find({
       $or: [{ userId: { $in: subscribedPins } }, { userId: userId }],
     })
@@ -140,7 +140,7 @@ export const getPinsByUser = async (req, res, next) => {
       .limit(limit);
     const totalPages = Math.ceil(count / limit);
     if (!pins) {
-      return next(createHttpError(404, "Pin not found"));
+      return next(createHttpError(404, `Pins not found`));
     }
     const allPins = {
       currentPage: page,
@@ -156,7 +156,7 @@ export const getPinsByUser = async (req, res, next) => {
 export const getASinglePin = async (req, res, next) => {
   const { id: pinId } = req.params;
   if (!isValidObjectId(pinId)) {
-    return next(createHttpError(400, "Invalid user id"));
+    return next(createHttpError(400, "Invalid pin id"));
   }
   try {
     const pin = await Pin.findById(pinId).populate(
@@ -186,15 +186,15 @@ export const likeAPin = async (req, res, next) => {
       return next(createHttpError(404, "Pin not found"));
     }
     if (pin.likes.includes(userId)) {
-      res.status(200).send("You already liked this pin");
+      res.status(400).send("You already liked this pin");
     }
-    res.status(200).json("pin liked");
+    res.status(200).json("Pin liked");
   } catch (error) {
     next(error);
   }
 };
 
-export const disLikeAPin = async (req, res, next) => {
+export const dislikeAPin = async (req, res, next) => {
   const { id: userId } = req.user;
   const { id: pinId } = req.params;
   if (!isValidObjectId(userId) || !isValidObjectId(pinId)) {
@@ -207,16 +207,16 @@ export const disLikeAPin = async (req, res, next) => {
     if (!pin) {
       return next(createHttpError(404, "Pin not found"));
     }
-    res.status(200).json("pin disliked");
+    res.status(200).json("Pin disliked");
   } catch (error) {
     next(error);
   }
 };
 
-export const getPinLikedByUser = async (req, res, next) => {
-  const { id: userId } = req.user;
+export const getPinsLikedByUser = async (req, res, next) => {
+  const { id: userId } = req.params;
   if (!isValidObjectId(userId)) {
-    return next(createHttpError(400, "Invalid user or pin id"));
+    return next(createHttpError(400, "Invalid user id"));
   }
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 20;
@@ -229,7 +229,7 @@ export const getPinLikedByUser = async (req, res, next) => {
     const count = await Pin.countDocuments();
     const totalPages = Math.ceil(count / limit);
     if (!pins) {
-      return next(createHttpError(404, "Pin not found"));
+      return next(createHttpError(404, `Pins not found`));
     }
     const allPins = {
       currentPage: page,
@@ -246,12 +246,14 @@ export const updateAPin = async (req, res, next) => {
   const { id: userId } = req.user;
   const { id: pinId } = req.params;
   const pinParams = req.body;
+
   if (!isValidObjectId(userId) || !isValidObjectId(pinId)) {
     return next(createHttpError(400, "Invalid user or pin id"));
   }
   if (!pinParams) {
     return next(createHttpError(400, "Parameters missing"));
   }
+
   try {
     const updatedFields = {
       title: pinParams.title,
@@ -259,6 +261,7 @@ export const updateAPin = async (req, res, next) => {
       image: pinParams.image,
       tags: pinParams.tags,
     };
+
     Object.keys(updatedFields).forEach(
       (key) =>
         (updatedFields[key] === " " || undefined) && delete updatedFields[key]
@@ -270,7 +273,7 @@ export const updateAPin = async (req, res, next) => {
       return next(createHttpError(404, "Pin could not be updated"));
     }
     if (!updatedPin.userId.equals(userId)) {
-      return next(createHttpError(404, "You can only update your pin"));
+      return next(createHttpError(401, "You can only update your pin"));
     }
     res.status(200).json({
       pin: updatedPin,
@@ -295,7 +298,7 @@ export const deleteAPin = async (req, res, next) => {
     if (!pin.userId.equals(userId)) {
       return next(createHttpError(401, "You can only delete your pin"));
     }
-    await Comment.deleteMany({ pinId: pinId})
+    await Comment.deleteMany({ pinId: pinId });
     await pin.deleteOne();
     res.status(200).send("Pin deleted");
   } catch (error) {
@@ -314,7 +317,7 @@ export const getRelatedPins = async (req, res, next) => {
       return next(createHttpError(404, "Pin not found"));
     }
     const getTags = pin.tags;
-    const getRelatedTags = await pin.find({ tag: { $in: getTags } });
+    const getRelatedTags = await Pin.find({ tags: { $in: getTags } });
     const filterRelatedPins = getRelatedTags.filter(
       (allPins) => allPins.id !== pinId
     );

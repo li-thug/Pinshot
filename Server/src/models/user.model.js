@@ -34,7 +34,7 @@ const userSchema = new Schema(
       type: String,
       default: "user",
     },
-    Followers: {
+    followers: {
       type: [String],
     },
     following: {
@@ -46,4 +46,4 @@ const userSchema = new Schema(
   }
 );
 
-export default model("User", userSchema)
+export default model("User", userSchema);

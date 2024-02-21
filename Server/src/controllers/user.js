@@ -1,11 +1,11 @@
 import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
-import User from "../models/user.model.js";
 import crypto from "crypto";
 import { isValidObjectId } from "mongoose";
-import generateToken from "../config/generateToken.js";
+import User from "../models/user.model.js";
 import Token from "../models/token.model.js";
-import env from "../utlis/validateEnv.js";
+import generateToken from "../config/generateToken.js";
+import env from "../utils/validateEnv.js";
 import sendEmail from "../config/sendMail.js";
 
 const createToken = async (userId, token) => {
@@ -26,20 +26,20 @@ export const signUp = async (req, res, next) => {
     const currentUserName = await User.findOne({ userName });
     if (currentUserName) {
       return next(
-        createHttpError(409, "Username already exist, choose another")
+        createHttpError(409, "Username already exists, choose another")
       );
     }
     const currentEmail = await User.findOne({ email });
     if (currentEmail) {
-      return next(createHttpError(409, "Email already exist, choose another"));
+      return next(createHttpError(409, "Email already exists, choose another"));
     }
 
     if (!currentUserName || !currentEmail) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
       const user = await User.create({
-        userName: userName,
-        email: email,
+        userName,
+        email,
         password: hashedPassword,
       });
 
@@ -51,17 +51,19 @@ export const signUp = async (req, res, next) => {
       if (!setToken) return next(createHttpError(400, "Error creating token"));
       const messageLink = `${env.BASE_URL}/verify-email/${user._id}/${setToken.token}`;
       if (!messageLink) {
-        return next(createHttpError(400, "Verification message not sent"));
+        return next(createHttpError(400, "Verification link not found"));
       }
       const sendMail = await sendEmail({
         userName: userName,
         from: env.USER_MAIL_LOGIN,
         to: user.email,
-        subject: " Email verification link",
-        text: `Hello,  ${userName}, please verify your email by clicking this link ${messageLink}. Link expires in 30 minutes`,
+        subject: "Email verification link",
+        text: `Hello, ${userName}, please verify your email by clicking on the link: ${messageLink}. Link expires in 30 minutes`,
       });
       if (!sendMail) {
-        return next (createHttpError(400, "Verification message could not be sent"))
+        return next(
+          createHttpError(400, "Verification message could not be sent")
+        );
       }
       res
         .status(201)
@@ -74,6 +76,9 @@ export const signUp = async (req, res, next) => {
 
 export const sendEmailVerificationLink = async (req, res, next) => {
   const { id: userId } = req.params;
+  if (!isValidObjectId(userId)) {
+    return next(createHttpError(400, `Invalid userId: ${userId}`));
+  }
   try {
     if (!userId) return next(createHttpError(400, "Invalid userId"));
     const user = await User.findOne({ _id: userId });
@@ -85,16 +90,18 @@ export const sendEmailVerificationLink = async (req, res, next) => {
     if (!setToken) return next(createHttpError(400, "Error creating token"));
     const messageLink = `${env.BASE_URL}/verify-email/${user._id}/${setToken.token}`;
     if (!messageLink)
-      return next(createHttpError(400, "Verification message not sent"));
+      return next(createHttpError(400, "Verification link not found"));
     const sendMail = await sendEmail({
       userName: user.userName,
       from: env.USER_MAIL_LOGIN,
       to: user.email,
-      subject: " Email verification link",
-      text: `hello,  ${user.userName}, please verify your email by clicking this link ${messageLink}. Link expires in 30 minutes`,
+      subject: "Email verification link",
+      text: `Hello, ${user.userName}, please verify your email by clicking on the link: ${messageLink}. Link expires in 30 minutes`,
     });
     if (!sendMail) {
-      return next (createHttpError(400, "Verification message could not be sent"))
+      return next(
+        createHttpError(400, "Verification message could not be sent")
+      );
     }
     res.status(200).json({ sendMail });
   } catch (error) {
@@ -108,12 +115,12 @@ export const verifyAccount = async (req, res, next) => {
     if (!isValidObjectId(userId)) {
       return next(createHttpError(400, `Invalid userId: ${userId}`));
     }
-    if (!userId || !Token) {
-      return next(createHttpError(400, "Invalid params token maybe broken"));
+    if (!userId || !token) {
+      return next(createHttpError(401, "Invalid params, token may be broken"));
     }
     const user = await User.findById(userId);
     if (!user) {
-      return next(createHttpError(400, "User not found"));
+      return next(createHttpError(404, "User not found"));
     }
     if (user.isVerified) {
       return res.status(401).send("User has already been verified");
@@ -123,7 +130,11 @@ export const verifyAccount = async (req, res, next) => {
     if (!getToken) {
       return next(createHttpError(401, "Invalid or expired token"));
     } else {
-      await User.findByIdAndUpdate(userId, { isVerified: true }, { new: true });
+      await User.findByIdAndUpdate(
+        user._id,
+        { isVerified: true },
+        { new: true }
+      );
       res.status(200).send("Email account verified successfully");
     }
   } catch (error) {
@@ -131,7 +142,7 @@ export const verifyAccount = async (req, res, next) => {
   }
 };
 
-export const Login = async (req, res, next) => {
+export const login = async (req, res, next) => {
   const { userName, password } = req.body;
   try {
     if (!userName || !password) {
@@ -160,7 +171,7 @@ export const authenticateUser = async (req, res, next) => {
     }
     const user = await User.findById(userId);
     if (!user) {
-      return next(createHttpError(400, "User not found"));
+      return next(createHttpError(404, "User not found"));
     }
     res.status(200).json(user);
   } catch (error) {
@@ -213,11 +224,12 @@ export const updateUserProfile = async (req, res, next) => {
       return next(createHttpError(404, "User not found"));
     }
     if (!updatedUser._id.equals(userId)) {
-      return next(createHttpError(404, "You cannot access this user"));
+      return next(createHttpError(401, "You cannot access this user"));
     }
-    res
-      .status(200)
-      .json({ user: updatedUser, msg: "User info update successfully" });
+    res.status(200).json({
+      user: updatedUser,
+      msg: "User info updated successfully",
+    });
   } catch (error) {
     next(error);
   }
@@ -227,11 +239,11 @@ export const recoverPasswordLink = async (req, res, next) => {
   const { email } = req.body;
   try {
     if (!email) {
-      return next(createHttpError(400, "Email is missing"));
+      return next(createHttpError(400, `Email field is missing`));
     }
     const user = await User.findOne({ email: email });
     if (!user) {
-      return next(createHttpError(404, "Email no found"));
+      return next(createHttpError(404, "Email not found"));
     }
     let setToken = await createToken({
       userId: user._id,
@@ -246,9 +258,10 @@ export const recoverPasswordLink = async (req, res, next) => {
       userName: user.userName,
       from: env.USER_MAIL_LOGIN,
       to: user.email,
-      subject: "Password Recovering link",
-      text: `Hello,  ${user.userName}, please click the link: to reset your password ${messageLink}. Link expires in 30 minutes`,
+      subject: "Password recovery link",
+      text: `Hello, ${user.userName}, please click the link: to reset your pasword ${messageLink}. Link expires in 30 minutes`,
     });
+    res.status(200).send("Recovery password link sent to your email");
   } catch (error) {
     next(error);
   }
@@ -262,11 +275,11 @@ export const resetUserPassword = async (req, res, next) => {
       return next(createHttpError(400, "Invalid userId"));
     }
     if (!password || !token) {
-      return next(createHttpError(400, "Invalid params token maybe broken"));
+      return next(createHttpError(401, "Invalid params, token may be broken"));
     }
     const user = await User.findById(userId);
     if (!user) {
-      return next(createHttpError(400, "User not found"));
+      return next(createHttpError(404, "User not found"));
     }
     const getToken = await verifyToken({ userId, token });
     if (!getToken) {
@@ -290,10 +303,11 @@ export const followAUser = async (req, res, next) => {
       return next(createHttpError(401, "Invalid id"));
     }
     if (!userId || !followId) {
-      return next(createHttpError(401, "User parameters missing"));
+      return next(createHttpError(401, "User parameters missing "));
     }
+
     if (userId === followId) {
-      return next(createHttpError(401, "You can't follow yourself"));
+      return next(createHttpError(401, "You cannot follow yourself"));
     }
     await User.findByIdAndUpdate(userId, {
       $push: { following: followId },
@@ -306,7 +320,8 @@ export const followAUser = async (req, res, next) => {
     next(error);
   }
 };
-export const unFollowAUser = async (req, res, next) => {
+
+export const unfollowAUser = async (req, res, next) => {
   const { id: userId } = req.user;
   const { id: followId } = req.params;
   try {
@@ -314,10 +329,10 @@ export const unFollowAUser = async (req, res, next) => {
       return next(createHttpError(401, "Invalid id"));
     }
     if (!userId || !followId) {
-      return next(createHttpError(401, "User parameters missing"));
+      return next(createHttpError(401, "User parameters missing "));
     }
     if (userId === followId) {
-      return next(createHttpError(401, "You can't unfollow yourself"));
+      return next(createHttpError(401, "You cannot unfollow yourself"));
     }
     await User.findByIdAndUpdate(userId, {
       $pull: { following: followId },
@@ -331,7 +346,7 @@ export const unFollowAUser = async (req, res, next) => {
   }
 };
 
-export const getFollowedUser = async (req, res, next) => {
+export const getFollowedUsers = async (req, res, next) => {
   const { id: userId } = req.params;
   try {
     if (!isValidObjectId(userId)) {
@@ -339,7 +354,7 @@ export const getFollowedUser = async (req, res, next) => {
     }
     const findUser = await User.findById(userId);
     if (!findUser) {
-      return next(createHttpError(404, "user not found"));
+      return next(createHttpError(404, "User not found"));
     }
     const getFollowedIds = findUser.following.map((user) => user);
     const user = await User.find({ _id: getFollowedIds });
@@ -357,9 +372,9 @@ export const getFollowers = async (req, res, next) => {
     }
     const findUser = await User.findById(userId);
     if (!findUser) {
-      return next(createHttpError(404, "user not found"));
+      return next(createHttpError(404, "User not found"));
     }
-    const getFollowedIds = findUser.Followers.map((user) => user);
+    const getFollowedIds = findUser.followers.map((user) => user);
     const user = await User.find({ _id: getFollowedIds });
     res.status(200).json(user);
   } catch (error) {
