@@ -1,12 +1,14 @@
 import { useTitle, useAuthContext } from "@hooks";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FormFields, FormUi } from "@layouts";
 import { registerOptions } from "@utils";
 import { userService } from "@services";
+import { toast } from "react-toastify";
 
 export default function Login() {
+  useTitle("Login to PINSHOT");
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -15,15 +17,35 @@ export default function Login() {
     register,
     formState: { errors, isSubmitting },
   } = useForm();
+  const { loggedInUser } = useAuthContext();
 
-  useTitle("Login to PINSHOT");
+  useEffect(() => {
+    if (loggedInUser) {
+      navigate("/explore");
+    }
+  }, [loggedInUser, navigate]);
 
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const onFormSubmit = async (data) => {
-    console.log(data);
+  const onFormSubmit = async ({ userName, password }) => {
+    sessionStorage.setItem("username", userName);
+    try {
+      const { status, data } = await userService.login(userName, password);
+      if (status === 200) {
+        localStorage.setItem("usertoken", JSON.stringify(data.access_token));
+        toast.success(data.msg);
+        window.location.replace("/explore");
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.response && error.response.data && error.response.data.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error(error.response.data || "something went wrong");
+      }
+    }
   };
 
   return (
@@ -54,7 +76,7 @@ export default function Login() {
         className="my-1 text-black position-relative"
         id="password"
         label="Password"
-        name="Password"
+        name="password"
         type="password"
         placeholder="Password"
         showPassword={showPassword}

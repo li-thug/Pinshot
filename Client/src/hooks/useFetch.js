@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { toast } from "react-toastify";
 
 export default function useFetch(api, params, extra) {
   const [getData, setData] = useState([]);
@@ -24,6 +25,7 @@ export default function useFetch(api, params, extra) {
       } catch (error) {
         if (!signal.aborted) {
           setError(error?.response?.data?.error || error?.message);
+          toast.error(error.response.statusText || "An error occurred")
         }
         console.error(error);
       } finally {

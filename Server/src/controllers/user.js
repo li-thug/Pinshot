@@ -5,7 +5,7 @@ import { isValidObjectId } from "mongoose";
 import User from "../models/user.model.js";
 import Token from "../models/token.model.js";
 import generateToken from "../config/generateToken.js";
-import env from "../utils/validateEnv.js";
+import env from "../utlis/validateEnv.js";
 import sendEmail from "../config/sendMail.js";
 
 const createToken = async (userId, token) => {
@@ -33,7 +33,6 @@ export const signUp = async (req, res, next) => {
     if (currentEmail) {
       return next(createHttpError(409, "Email already exists, choose another"));
     }
-
     if (!currentUserName || !currentEmail) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
@@ -42,7 +41,6 @@ export const signUp = async (req, res, next) => {
         email,
         password: hashedPassword,
       });
-
       const access_token = generateToken(user._id, user.role);
       let setToken = await createToken({
         userId: user._id,
@@ -125,7 +123,6 @@ export const verifyAccount = async (req, res, next) => {
     if (user.isVerified) {
       return res.status(401).send("User has already been verified");
     }
-
     const getToken = await verifyToken({ userId, token });
     if (!getToken) {
       return next(createHttpError(401, "Invalid or expired token"));
@@ -205,7 +202,6 @@ export const updateUserProfile = async (req, res, next) => {
     if (!userId) {
       return next(createHttpError(404, "User not found"));
     }
-
     const updatedFields = {
       userName,
       email,
@@ -251,7 +247,6 @@ export const recoverPasswordLink = async (req, res, next) => {
     });
     if (!setToken) return next(createHttpError(400, "Error creating token"));
     const messageLink = `${env.BASE_URL}/reset-password/${user._id}/${setToken.token}`;
-
     if (!messageLink)
       return next(createHttpError(400, "Verification message not sent"));
     await sendEmail({
@@ -363,7 +358,6 @@ export const getFollowedUsers = async (req, res, next) => {
     next(error);
   }
 };
-
 export const getFollowers = async (req, res, next) => {
   const { id: userId } = req.params;
   try {

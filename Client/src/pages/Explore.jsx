@@ -8,9 +8,13 @@ import { ReactInfiniteScroll, MasonryLayout, PinCard } from "@components";
 export default function Explore() {
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
-  const [hasMore, setHasMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [moreData, setMoreData] = useState([]);
-  const { data, loading } = useFetch(pinService.getRandomPins, currentPage);
+  const {
+    data,
+    loading,
+    error: errorFetch,
+  } = useFetch(pinService.getRandomPins, currentPage);
   useTitle("Explore random pins");
   console.log("pg", data);
 
@@ -18,10 +22,10 @@ export default function Explore() {
   console.log("ft", firstData);
 
   const fetchMoreData = async () => {
-    // if (data?.pins?.length < 20) {
-    //   setHasMore(false);
-    //   return;
-    // }
+    if (firstData?.length < 20) {
+      setHasMore(false);
+      return;
+    }
     try {
       setMoreData((prevMoreData) => [...prevMoreData, ...firstData]);
       setHasMore(moreData.length > 0);
@@ -33,12 +37,13 @@ export default function Explore() {
   };
 
   const allPins = [...moreData, ...firstData];
-  console.log("all", allPins);
 
   return (
     <PageLayout>
-      {error ? (
-        <p>{error}</p>
+      {errorFetch || error ? (
+        <>
+          <p>{errorFetch || error}</p>
+        </>
       ) : (
         <>
           {loading && <Spinner text="Fetching pins" />}

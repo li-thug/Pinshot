@@ -4,7 +4,7 @@ import env from "./utlis/validateEnv.js"
 
 const port = env.PORT || 6000;
 
-if (!port || !env.MONGODB_URI) {
+if (!port || !env.MONGODB_URL) {
   throw new Error(
     "Please make sure the env file is in place and populated with a port number"
   );
