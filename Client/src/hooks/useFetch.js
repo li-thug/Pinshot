@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 
 export default function useFetch(api, params, extra) {
   const [getData, setData] = useState([]);
-  const [pagedData, setPagedData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -18,14 +17,13 @@ export default function useFetch(api, params, extra) {
       try {
         const res = await api(params, extra, { signal });
         if (!signal.aborted) {
-          setData(res.data);
-          setPagedData(res.data?.pins);
+          setData(res.data?.pins ? res?.data?.pins : res.data);
           setError(null);
         }
       } catch (error) {
         if (!signal.aborted) {
           setError(error?.response?.data?.error || error?.message);
-          toast.error(error.response.statusText || "An error occurred")
+          toast.error(error.response?.data || "An error occurred");
         }
         console.error(error);
       } finally {
@@ -40,5 +38,5 @@ export default function useFetch(api, params, extra) {
     };
   }, [api, params, extra]);
 
-  return { data, loading, error, setData, pagedData, setPagedData };
+  return { data, loading, error, setData };
 }

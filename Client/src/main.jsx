@@ -5,6 +5,8 @@ import "./index.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import "@fontsource-variable/manrope";
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

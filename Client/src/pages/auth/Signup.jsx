@@ -1,14 +1,14 @@
 import { useTitle, useAuthContext } from "@hooks";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FormFields, FormUi } from "@layouts";
 import { registerOptions } from "@utils";
 import { userService } from "@services";
 import { toast } from "react-toastify";
 
-export default function Login() {
-  useTitle("Login to PINSHOT");
+export default function Signup() {
+  useTitle("Signup to PINSHOT");
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function Login() {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm({defaultValues: {userName : sessionStorage.getItem("UserName") || ""}});
+  } = useForm();
   const { loggedInUser } = useAuthContext() || {};
   const from = location.state?.from || "/";
 
@@ -30,14 +30,17 @@ export default function Login() {
     setShowPassword((prev) => !prev);
   };
 
-  const onFormSubmit = async ({ userName, password }) => {
-    sessionStorage.setItem("username", userName);
+  const onFormSubmit = async ({ userName, email, password }) => {
     try {
-      const { status, data } = await userService.login(userName, password);
-      if (status === 200) {
+      const { status, data } = await userService.signup(
+        userName,
+        email,
+        password
+      );
+      if (status === 201) {
         localStorage.setItem("usertoken", JSON.stringify(data.access_token));
         toast.success(data.msg);
-       window.location.replace("/")
+        window.location.replace("/");
       }
     } catch (error) {
       console.error(error);
@@ -51,11 +54,11 @@ export default function Login() {
 
   return (
     <FormUi
-      title="Welcome, Login"
-      info="Don't have an account?"
-      to="/signup"
-      path="Sign Up"
-      btnText="Login"
+      title="Welcome, Singu"
+      info=" Already have an account?"
+      to="/login"
+      path="Login"
+      btnText="Signup"
       onSubmit={handleSubmit(onFormSubmit)}
       isSubmitting={isSubmitting}
     >
@@ -72,6 +75,17 @@ export default function Login() {
       />
       <FormFields
         register={register}
+        errors={errors?.email}
+        registerOptions={registerOptions?.email}
+        className="my-4 text-black"
+        id="email"
+        label="Email"
+        name="email"
+        type="email"
+        placeholder="Email"
+      />
+      <FormFields
+        register={register}
         errors={errors?.password}
         registerOptions={registerOptions?.password}
         className="my-1 text-black position-relative"
@@ -83,12 +97,6 @@ export default function Login() {
         showPassword={showPassword}
         togglePassword={togglePassword}
       />
-      <div
-        className="w-100 text-end my-2"
-        style={{ color: "var(--orangeLight)", fontWeight: 500 }}
-      >
-        <Link to="/forgot-password">Forgot Password?</Link>
-      </div>
     </FormUi>
   );
 }

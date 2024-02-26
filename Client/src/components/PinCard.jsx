@@ -24,7 +24,7 @@ export default function PinCard({ _id, title, image }) {
           <IoMdDownload color="white" />
         </div>
       </div>
-      <p className="fw-medium">
+      <p className="small fw-bold">
         {title?.length > 50 ? title.slice(0, 25) + "..." : title}
       </p>
     </>

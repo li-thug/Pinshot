@@ -15,6 +15,7 @@ export default function AuthProvider({ children }) {
   const [fetchUser, setLoggedInUser] = useState("");
   const loggedInUser = useMemo(() => fetchUser, [fetchUser]);
   // const getUserRef = useRef();
+
   const token = JSON.parse(localStorage.getItem("usertoken"));
 
   const getUser = useCallback(async () => {

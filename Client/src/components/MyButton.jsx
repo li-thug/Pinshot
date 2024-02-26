@@ -10,7 +10,7 @@ export default function MyButton({ text, variant, className, ...props }) {
 }
 
 MyButton.propTypes = {
-  text: PropTypes.string,
+  text: PropTypes.any,
   className: PropTypes.string,
   variant: PropTypes.string,
   props: PropTypes.any,

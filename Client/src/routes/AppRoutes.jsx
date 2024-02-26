@@ -1,16 +1,18 @@
 import { Suspense, lazy } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Home, Explore, Login } from "@pages";
+import { Home, Explore, Login, Signup, HomeUser, PinDetails } from "@pages";
 import { Spinner } from "@utils";
 
 const Root = lazy(() => import("@layouts/Root"));
+
+const token = localStorage.getItem("usertoken");
 
 export default function AppRoutes() {
   const routes = [
     {
       path: "/",
       name: "Home",
-      element: <Home />,
+      element: token ? <HomeUser /> : <Home />,
     },
     {
       path: "explore",
@@ -21,6 +23,16 @@ export default function AppRoutes() {
       path: "login",
       name: "Login",
       element: <Login />,
+    },
+    {
+      path: "signup",
+      name: "Signup",
+      element: <Signup />,
+    },
+    {
+      path: "pin/:pinId",
+      name: "PinDetails",
+      element: <PinDetails />,
     },
   ];
 

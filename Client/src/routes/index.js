@@ -1,3 +1,4 @@
 import AppRoutes from "./AppRoutes";
+import ProtectedRoutes from "./ProtectedRoutes.";
 
-export { AppRoutes };
+export { AppRoutes, ProtectedRoutes };

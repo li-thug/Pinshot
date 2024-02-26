@@ -1,15 +1,12 @@
 import { Row, Col, Image } from "react-bootstrap";
 import { MyButton } from "@components";
-import styles from "./home.module.css";
 import { Link } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import styles from "./home.module.css";
+import {imgs, logo, jayson }  from "@assets";
+
 
 export default function Home() {
-  const imgs = [
-    "https://unsplash.com/photos/stNs_FzKuRA/download?force=true&w=640",
-    "https://unsplash.com/photos/2D4vFlcQGzM/download?force=true&w=640",
-    "https://unsplash.com/photos/rZBmXd-oqW8/download?ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzA4MTAzOTUwfA&force=true&w=640",
-    "https://unsplash.com/photos/zdLdgGbi9Ow/download?force=true&w=640",
-  ];
   return (
     <div className="mt-md-5 px-0">
       <div className="d-none d-md-block py-5">
@@ -20,7 +17,12 @@ export default function Home() {
         <Row className="g-3 px-3 justify-content-center">
           {imgs.map((img, i) => (
             <Col key={i} md={4} lg={3}>
-              <Image src={img} className="w-100 h-100 rounded-4" />
+              <LazyLoadImage
+                effect="blur"
+                src={img}
+                className="w-100 h-100 rounded-4 object-fit-cover"
+                alt="poster-img"
+              />
             </Col>
           ))}
         </Row>
@@ -34,14 +36,8 @@ export default function Home() {
         <div
           className={`${styles.hero} position-absolute top-50 start-50 translate-middle w-100 text-center`}
         >
-          <Image
-            src={
-              "https://res.cloudinary.com/ceenobi/image/upload/v1706179614/pintube/Frame_16_ecr4pq.svg"
-            }
-            alt="logo"
-            style={{ width: "200px" }}
-          />
-          <h1 className="my-4 text-center text-white fw-bold display-5">
+          <Image src={logo} alt="logo" style={{ width: "180px" }} />
+          <h1 className="my-4 text-center text-white fw-bold display-6">
             Post, Like, Comment
           </h1>
           <Link to="/signup">
@@ -61,17 +57,15 @@ export default function Home() {
         </div>
       </div>
       <div
-        className={`d-md-flex justify-content-center justify-content-md-between align-items-center ${styles.explore}`}
+        className={`d-md-flex justify-content-center justify-content-md-between align-items-center h-auto ${styles.explore}`}
       >
-        <div  className="w-100 h-100">
-          <Image
-            src={
-              "https://unsplash.com/photos/YSB0wB74Gpg/download?ixid=M3wxMjA3fDB8MXx0b3BpY3x8UzRNS0xBc0JCNzR8fHx8fDJ8fDE3MDgxMTY3OTV8&force=true&w=640"
-            }
-            alt="logo"
-            className={styles.imgAdjust}
-          />
-        </div>
+        <LazyLoadImage
+          effect="blur"
+          src={jayson}
+          alt="unslash Image"
+          className={styles.imgAdjust}
+        />
+
         <div className="text-center p-4 w-100">
           <h1
             className="my-4 fw-bold display-5"

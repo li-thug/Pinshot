@@ -6,7 +6,7 @@ import { PageLayout } from "@layouts";
 import { Spinner } from "@utils";
 import { ReactInfiniteScroll, MasonryLayout, PinCard } from "@components";
 
-export default function Explore() {
+export default function HomeUser() {
   const [currentPage, setCurrentPage] = useState(1);
   const [error, setError] = useState(null);
   const [hasMore, setHasMore] = useState(true);
@@ -15,8 +15,8 @@ export default function Explore() {
     data,
     loading,
     error: errorFetch,
-  } = useFetch(pinService.getRandomPins, currentPage);
-  useTitle("Explore random pins");
+  } = useFetch(pinService.getFollowedPins, currentPage);
+  useTitle("Your Home Pins");
   uuidv4();
 
   const fetchMoreData = async () => {
@@ -29,9 +29,7 @@ export default function Explore() {
       console.error(error);
     }
   };
-
   const allPins = [...moreData, ...data];
-
   return (
     <PageLayout>
       {errorFetch || error ? (

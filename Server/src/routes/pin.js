@@ -18,7 +18,7 @@ router.get(
   PinController.getPinsByUser
 );
 
-router.get("/:id", verifyToken(Roles.All), PinController.getASinglePin);
+router.get("/:id", PinController.getASinglePin);
 
 router.put("/like/:id", verifyToken(Roles.All), PinController.likeAPin);
 router.put("/dislike/:id", verifyToken(Roles.All), PinController.dislikeAPin);

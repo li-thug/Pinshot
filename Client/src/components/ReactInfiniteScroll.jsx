@@ -16,7 +16,7 @@ export default function ReactInfiniteScroll({
       loader={
         <div className="d-flex flex-column justify-content-center align-items-center">
           <ClipLoader />
-          <p>Fetching pins</p>
+          <p>Fetching more pins</p>
         </div>
       }
       endMessage={
