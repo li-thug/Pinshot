@@ -12,9 +12,9 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useAuthContext } from "@hooks";
 import { PiCameraPlus } from "react-icons/pi";
 import { userService } from "@services";
+import { logo, avatar } from "@assets";
 import styles from "./nav.module.css";
 import MyButton from "../MyButton";
-import { logo } from "@assets";
 
 export default function Header() {
   const location = useLocation();
@@ -27,14 +27,24 @@ export default function Header() {
   return (
     <div
       className={
-        location.pathname === "/" && !loggedInUser ? " d-none d-md-block" : ""
+        location.pathname === "/" && !loggedInUser ? "d-none d-md-block" : ""
       }
     >
       <Container fluid className={`${styles.navContainer} fixed-top w-100 p-3`}>
         <div className="d-flex justify-content-between align-items-center">
           <Stack direction="horizontal" gap={3}>
             <NavLink to="/">
-              <Image src={logo} alt="logo" />
+              <Image src={logo} alt="logo" style={{ width: "100px" }} />
+            </NavLink>
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive
+                  ? "activeLink fw-bold d-none d-md-block"
+                  : "no-activeLink fw-bold d-none d-md-block"
+              }
+            >
+              Home
             </NavLink>
             <NavLink
               to="/explore"
@@ -45,10 +55,14 @@ export default function Header() {
               Explore
             </NavLink>
           </Stack>
-          <Form style={{ minWidth: "50%" }} className="d-none d-md-block mx-auto">
+
+          <Form
+            style={{ minWidth: "45%" }}
+            className="d-none d-md-block mx-auto"
+          >
             <InputGroup className=" w-100 rounded-pill border-0 bg-secondary-subtle">
               <Form.Control
-                placeholder="Search"
+                placeholder="Search pins, users..."
                 aria-label="Search bar"
                 className="rounded-start-pill border-0 bg-transparent p-2"
               />
@@ -57,8 +71,9 @@ export default function Header() {
               </Button>
             </InputGroup>
           </Form>
+
           {loggedInUser ? (
-            <Stack direction="horizontal" gap={3}>
+            <Stack direction="horizontal" gap={2}>
               <NavLink
                 to="/create-pin"
                 className={({ isActive }) =>
@@ -70,7 +85,11 @@ export default function Header() {
               <Dropdown>
                 <Dropdown.Toggle variant="none" id="dropdown-basic">
                   <Image
-                    src={loggedInUser?.profilePhoto}
+                    src={
+                      loggedInUser?.profilePhoto
+                        ? loggedInUser?.profilePhoto
+                        : avatar
+                    }
                     roundedCircle
                     className="object-fit-cover"
                     style={{ width: "35px", height: "35px" }}

@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 
 export default function MyButton({ text, variant, className, ...props }) {
   return (
-    <Button variant={variant} className={`${className} fw-bold`} {...props}>
+    <Button
+      variant={variant}
+      className={`${className} fw-bold border-0`}
+      {...props}
+    >
       {text}
     </Button>
   );

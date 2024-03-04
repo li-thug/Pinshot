@@ -12,8 +12,20 @@ const authUser = async () => {
   return connect.get("/auth", { headers: authHeader() });
 };
 
+const followAUser = async (followId, userId) => {
+  return connect.put(`/auth/follow/${followId}`, userId, {
+    headers: authHeader(),
+  });
+};
+
+const unfollowAUser = async (followId, userId) => {
+  return connect.put(`/auth/unfollow/${followId}`, userId, {
+    headers: authHeader(),
+  });
+};
+
 const logout = () => {
-  localStorage.removeItem("usertoken");
+  localStorage.clear();
   window.location.reload();
 };
 
@@ -21,5 +33,7 @@ export default {
   login,
   signup,
   authUser,
+  followAUser,
+  unfollowAUser,
   logout,
 };

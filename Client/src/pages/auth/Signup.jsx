@@ -40,7 +40,7 @@ export default function Signup() {
       if (status === 201) {
         localStorage.setItem("usertoken", JSON.stringify(data.access_token));
         toast.success(data.msg);
-        window.location.replace("/");
+        window.location.replace(from);
       }
     } catch (error) {
       console.error(error);
@@ -54,11 +54,11 @@ export default function Signup() {
 
   return (
     <FormUi
-      title="Welcome, Singu"
-      info=" Already have an account?"
+      title="Welcome, Sign Up"
+      info="Already have an account?"
       to="/login"
       path="Login"
-      btnText="Signup"
+      btnText="Sign Up"
       onSubmit={handleSubmit(onFormSubmit)}
       isSubmitting={isSubmitting}
     >

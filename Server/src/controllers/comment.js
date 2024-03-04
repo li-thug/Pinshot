@@ -129,13 +129,14 @@ export const deleteAComment = async (req, res, next) => {
       return next(createHttpError(400, "commentId is missing"));
     }
     const user = await User.findById(userId);
-    const comment = await Comment.findByIdAndDelete(commentId);
-    if (!user._id.equals(comment.userId)) {
-      return next(createHttpError(401, "You can only delete your own comment"));
-    }
+    const comment = await Comment.findById(commentId);
     if (!comment) {
       return next(createHttpError(404, "Comment not found"));
     }
+    if (!user._id.equals(comment.userId._id)) {
+      return next(createHttpError(401, "You can only delete your own comment"));
+    }
+    await comment.deleteOne();
     res.status(200).send("Comment deleted!");
   } catch (error) {
     next(error);

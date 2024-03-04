@@ -16,7 +16,9 @@ export default function Login() {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm({defaultValues: {userName : sessionStorage.getItem("UserName") || ""}});
+  } = useForm({
+    defaultValues: { userName: sessionStorage.getItem("username") || "" },
+  });
   const { loggedInUser } = useAuthContext() || {};
   const from = location.state?.from || "/";
 
@@ -37,7 +39,7 @@ export default function Login() {
       if (status === 200) {
         localStorage.setItem("usertoken", JSON.stringify(data.access_token));
         toast.success(data.msg);
-       window.location.replace("/")
+        window.location.replace(from);
       }
     } catch (error) {
       console.error(error);

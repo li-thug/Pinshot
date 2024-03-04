@@ -3,8 +3,7 @@ import { MyButton } from "@components";
 import { Link } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import styles from "./home.module.css";
-import {imgs, logo, jayson }  from "@assets";
-
+import { imgs, jayson, logo } from "@assets";
 
 export default function Home() {
   return (
@@ -20,8 +19,8 @@ export default function Home() {
               <LazyLoadImage
                 effect="blur"
                 src={img}
-                className="w-100 h-100 rounded-4 object-fit-cover"
-                alt="poster-img"
+                className="w-100 h-auto rounded-4 object-fit-cover"
+                alt="poster-imgs"
               />
             </Col>
           ))}
@@ -62,10 +61,10 @@ export default function Home() {
         <LazyLoadImage
           effect="blur"
           src={jayson}
-          alt="unslash Image"
+          alt="unsplash image"
           className={styles.imgAdjust}
         />
-
+        
         <div className="text-center p-4 w-100">
           <h1
             className="my-4 fw-bold display-5"
@@ -73,7 +72,7 @@ export default function Home() {
           >
             See ideas you like
           </h1>
-          <p className="lead" style={{ color: "var(--teal200" }}>
+          <p className="fw-medium fs-5" style={{ color: "var(--teal200" }}>
             Browse through our collection of posts, see pictures <br />
             and get inspired for your next big thing.
           </p>

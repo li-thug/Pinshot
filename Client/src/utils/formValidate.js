@@ -3,7 +3,7 @@ const registerOptions = {
     required: "Email is required",
     validate: {
       maxLength: (v) =>
-        v.length <= 30 || "The email should have at most 30 characters",
+        v.length <= 50 || "The email should have at most 50 characters",
       matchPattern: (v) =>
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
         "Invalid email address",

@@ -14,7 +14,6 @@ export default function PinCard({ _id, title, image }) {
             src={image[0]}
             className="w-100 h-100 rounded-4 object-fit-cover"
             alt={title}
-            title={title}
           />
         </Link>
         <div className="d-none d-xl-block focus-heart p-2">

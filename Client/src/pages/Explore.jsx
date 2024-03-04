@@ -22,7 +22,7 @@ export default function Explore() {
   const fetchMoreData = async () => {
     try {
       setMoreData((prevMoreData) => [...prevMoreData, ...data]);
-      moreData.length > 0 ? setHasMore(true) : setHasMore(false);
+      moreData?.length > 0 ? setHasMore(true) : setHasMore(false);
       setCurrentPage((prevPage) => prevPage + 1);
     } catch (error) {
       setError(error.message);
@@ -54,8 +54,8 @@ export default function Explore() {
               </MasonryLayout>
             </ReactInfiniteScroll>
           )}
-          {!allPins && (
-            <p className="mt-5 py-5">No pins to show at the moment.</p>
+          {!allPins.length && (
+            <p className="mt-5">No pins to show at the moment.</p>
           )}
         </>
       )}

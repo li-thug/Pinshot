@@ -16,20 +16,22 @@ export default function HomeUser() {
     loading,
     error: errorFetch,
   } = useFetch(pinService.getFollowedPins, currentPage);
-  useTitle("Your Home Pins");
+  useTitle("Your Home pins");
   uuidv4();
 
   const fetchMoreData = async () => {
     try {
       setMoreData((prevMoreData) => [...prevMoreData, ...data]);
-      moreData.length > 0 ? setHasMore(true) : setHasMore(false);
+      moreData?.length > 0 ? setHasMore(true) : setHasMore(false);
       setCurrentPage((prevPage) => prevPage + 1);
     } catch (error) {
       setError(error.message);
       console.error(error);
     }
   };
+
   const allPins = [...moreData, ...data];
+
   return (
     <PageLayout>
       {errorFetch || error ? (
@@ -52,8 +54,11 @@ export default function HomeUser() {
               </MasonryLayout>
             </ReactInfiniteScroll>
           )}
-          {!allPins && (
-            <p className="mt-5 py-5">No pins to show at the moment.</p>
+          {!allPins.length && (
+            <p className="mt-5">
+              No pins to show at the moment. Vist explore to view and follow a
+              user
+            </p>
           )}
         </>
       )}
