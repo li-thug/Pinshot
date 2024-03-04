@@ -35,7 +35,6 @@ router.delete("/:id", verifyToken(Roles.All), PinController.deleteAPin);
 
 router.get(
   "/:id/related",
-  verifyToken(Roles.All),
   PinController.getRelatedPins
 );
 

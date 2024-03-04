@@ -306,6 +306,28 @@ export const deleteAPin = async (req, res, next) => {
   }
 };
 
+// export const getRelatedPins = async (req, res, next) => {
+//   const { id: pinId } = req.params;
+//   if (!isValidObjectId(pinId)) {
+//     return next(createHttpError(400, "Invalid pin id"));
+//   }
+//   try {
+//     const pin = await Pin.findById(pinId);
+//     if (!pin) {
+//       return next(createHttpError(404, "Pin not found"));
+//     }
+//     const getTags = pin.tags;
+//     const getRelatedTags = await Pin.find({ tags: { $in: getTags } });
+//     const filterRelatedPins = getRelatedTags.filter(
+//       (allPins) => allPins.id !== pinId
+//     );
+//     res.status(200).json(filterRelatedPins);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+
 export const getRelatedPins = async (req, res, next) => {
   const { id: pinId } = req.params;
   if (!isValidObjectId(pinId)) {
@@ -317,11 +339,11 @@ export const getRelatedPins = async (req, res, next) => {
       return next(createHttpError(404, "Pin not found"));
     }
     const getTags = pin.tags;
-    const getRelatedTags = await Pin.find({ tags: { $in: getTags } });
-    const filterRelatedPins = getRelatedTags.filter(
-      (allPins) => allPins.id !== pinId
+    const allPins = await Pin.aggregate([{$sample: { size: 10 } }]);
+    const unrelatedPins = allPins.filter(
+      (pin) => !pin.tags.some((tag) => getTags.includes(tag))
     );
-    res.status(200).json(filterRelatedPins);
+    res.status(200).json(unrelatedPins);
   } catch (error) {
     next(error);
   }

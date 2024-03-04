@@ -1,7 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 
-export default function ProtectedRoutes(children, isAuth) {
+export default function ProtectedRoutes({children, isAuth}) {
   const location = useLocation();
 
   if (!isAuth) {

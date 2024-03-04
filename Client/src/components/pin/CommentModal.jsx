@@ -20,7 +20,7 @@ export default function CommentModal({
 
   return (
     <>
-      <p className="cursor fw-bold" onClick={handleShow}>
+      <p className="cursor fw-meduim small" onClick={handleShow}>
         See all comments
       </p>
       <Offcanvas show={show} onHide={handleClose} placement="end">

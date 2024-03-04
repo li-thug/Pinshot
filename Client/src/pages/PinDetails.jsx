@@ -16,7 +16,7 @@ import {
 import {
   PinModal,
   MyButton,
-  Comments,
+  Comment,
   MasonryLayout,
   PinCard,
 } from "@components";
@@ -261,7 +261,7 @@ export default function PinDetails() {
                     style={{
                       backgroundColor: isFollowed
                         ? "var(--teal200)"
-                        : "var(--orangeLight",
+                        : "var(--orangeLight)",
                     }}
                     onClick={
                       isFollowed
@@ -271,7 +271,7 @@ export default function PinDetails() {
                   />
                 )}
               </div>
-              <Comments pinId={pinId} />
+              <Comment pinId={pinId} />
             </Col>
           </Row>
           <div className="mt-3">

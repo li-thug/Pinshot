@@ -99,6 +99,25 @@ button:hover {
   border-radius: 15px;
 }
 
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  color: var(--orangeLight) !important;
+  background-color: white !important;
+  border: none;
+  border-bottom: 2px solid var(--orangeLight) !important;
+}
+
+.nav-tabs {
+  border-bottom: none !important;
+}
+
+.nav-tabs .nav-link {
+  color: var(--teal200);
+}
+.nav-tabs .nav-link:hover {
+  color: gray;
+}
+
 @media (min-width: 768px) {
   .form {
     width: 420px;

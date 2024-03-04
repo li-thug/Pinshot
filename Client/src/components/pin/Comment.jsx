@@ -184,7 +184,7 @@ export default function Comment({ pinId }) {
         )}
       </>
 
-      {pinComments?.length > 0 && (
+      {pinComments?.length > 5 && (
         <CommentModal
           pinComments={pinComments}
           handleLike={handleLike}

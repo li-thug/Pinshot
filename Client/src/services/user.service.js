@@ -24,6 +24,18 @@ const unfollowAUser = async (followId, userId) => {
   });
 };
 
+const getUserProfile = async (userName) => {
+  return connect.get(`/auth/profile/${userName}`, {
+    headers: authHeader(),
+  });
+};
+
+const resendEmailVerificationLink = async (userId) => {
+  return connect.post(`/auth/resend-token/${userId}`,userId, {
+    headers: authHeader(),
+  });
+};
+
 const logout = () => {
   localStorage.clear();
   window.location.reload();
@@ -36,4 +48,6 @@ export default {
   followAUser,
   unfollowAUser,
   logout,
+  getUserProfile,
+  resendEmailVerificationLink
 };

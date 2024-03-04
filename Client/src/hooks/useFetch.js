@@ -17,7 +17,7 @@ export default function useFetch(api, params, extra) {
       try {
         const res = await api(params, extra, { signal });
         if (!signal.aborted) {
-          setData(res.data?.pins ? res?.data?.pins : res.data);
+          setData(res?.data?.pins ? res?.data?.pins : res.data);
           setError(null);
         }
       } catch (error) {
